@@ -1,16 +1,14 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
 
 def keystorePropertiesFile = rootProject.file("/Users/kpa/BuglyDemo/app/signing.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
-def releaseTime() {
+static def releaseTime() {
     String date = new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
-    return date.substring(2)
+    return date
 }
 
 android {
@@ -39,6 +37,8 @@ android {
             keyPassword keystoreProperties['KEY_PASSWORD']
             storeFile file(keystoreProperties['STORE_FILE'])
             storePassword keystoreProperties['STORE_PASSWORD']
+            v1SigningEnabled = true
+            v2SigningEnabled = true //在Android 7.0的时候签名需要使用V1，V2  不然部分机型会报错
         }
     }
     //BuildType类型
