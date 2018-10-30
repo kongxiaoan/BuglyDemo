@@ -4,8 +4,18 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+def keystorePropertiesFile = rootProject.file("/Users/kpa/BuglyDemo/app/signing.properties")
+def keystoreProperties = new Properties()
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+def releaseTime() {
+    String date = new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
+    return date.substring(2)
+}
+
 android {
     compileSdkVersion 27
+    //默认配置 是ProductFlavor类型。它共享给其他ProductFlavor使用
     defaultConfig {
         applicationId "com.kpa.buglydemo"
         minSdkVersion 23
@@ -18,21 +28,92 @@ android {
             abiFilters 'armeabi' //, 'x86', 'armeabi-v7a', 'x86_64', 'arm64-v8a'
         }
     }
+    // 源文件目录设置，是AndroidSourceSet类型。
+    sourceSets {
+
+    }
+    //签名配置，SigningConfig类型
+    signingConfigs {
+        config {
+            keyAlias keystoreProperties['KEY_ALIAS']
+            keyPassword keystoreProperties['KEY_PASSWORD']
+            storeFile file(keystoreProperties['STORE_FILE'])
+            storePassword keystoreProperties['STORE_PASSWORD']
+        }
+    }
+    //BuildType类型
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.config
         }
+    }
+
+    android.applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def outputFile = output.outputFile
+            if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                def name = outputFile.name
+                def suffix = ""
+                if(name.contains("debug")){
+                    suffix = "debug"
+                }else if (name.contains("release")){
+                    suffix = "release"
+                }
+                //这里修改apk文件名
+                outputFileName = "APPNAME-APP_FJ-${defaultConfig.versionName}-BETA-${releaseTime()}-${suffix}.apk"
+            }
+
+        }
+
+    }
+
+    //产品风格配置，ProductFlavor类型
+    productFlavors {
+
+    }
+    //测试配置，TestOptions类型
+    testOptions {
+
+    }
+    //aapt配置，AaptOptions类型
+    aaptOptions {
+
+    }
+    //lint配置，LintOptions类型
+    lintOptions {
+
+    }
+    // dex配置，DexOptions类型
+    dexOptions {
+
+    }
+    //编译配置，CompileOptions类型
+    compileOptions {
+
+    }
+    //PackagingOptions类型
+    packagingOptions {
+
+    }
+    //JacocoExtension类型。 用于设定 jacoco版本
+    jacoco {
+
+    }
+    //Splits类型
+    splits {
+
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     testImplementation 'junit:junit:4.12'
-
     implementation 'com.blankj:utilcode:1.21.0'
     implementation 'com.android.support:appcompat-v7:27.1.1'
     implementation 'com.android.support:recyclerview-v7:27.1.1'
-    implementation 'com.tencent.bugly:crashreport_upgrade:1.3.5'//其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.0
+    implementation 'com.tencent.bugly:crashreport_upgrade:1.3.5'
+    //其中latest.release指代最新版本号，也可以指定明确的版本号，例如1.2.0
 }
