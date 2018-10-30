@@ -7,11 +7,10 @@
     tools:context=".MainActivity">
 
 
-    <Button
+    <TextView
+        android:gravity="center"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:text="更新"
-        android:id="@+id/button"
-        />
+        android:layout_height="wrap_content"
+        android:text="自动更新测试" />
 
 </RelativeLayout>
