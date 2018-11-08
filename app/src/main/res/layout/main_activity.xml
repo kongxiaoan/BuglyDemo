@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".main.MainActivity">
 
-
-    <TextView
-        android:gravity="center"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/mainListRv"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="自动更新测试" />
+        android:layout_height="match_parent"
+        android:paddingLeft="28dp"
+        android:paddingRight="28dp">
+
+    </android.support.v7.widget.RecyclerView>
 
 </RelativeLayout>

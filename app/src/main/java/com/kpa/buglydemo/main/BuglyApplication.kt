@@ -1,15 +1,15 @@
-package com.kpa.buglydemo
+package com.kpa.buglydemo.main
 
 import android.app.Application
 import android.content.Context
 import android.os.Environment
 import android.view.View
 import com.blankj.utilcode.util.Utils
+import com.kpa.buglydemo.R
 import com.tencent.bugly.Bugly
 import com.tencent.bugly.beta.Beta
 import com.tencent.bugly.beta.UpgradeInfo
 import com.tencent.bugly.beta.ui.UILifecycleListener
-import com.tencent.bugly.crashreport.CrashReport
 
 /**
  *author: mr.kong
